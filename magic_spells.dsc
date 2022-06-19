@@ -67,13 +67,17 @@ spell_honsumaki:
         - define val <[value]>
         - if <[val]> > 20:
             - define val <[value].sub[20]>
+        - playsound sound:entity_blaze_shoot <[entityls].location> pitch:0.5 volume:0.5
         - define pos <[circ].get[<[val]>].up[<[value].div[4]>]>
         - playeffect effect:flame at:<[pos]> offset:0.1,0.1,0.1 quantity:4 visibility:100
         - adjust <[entityls]> velocity:0,0.2,0
         - wait 1t
     - playeffect effect:explosion_large at:<[entityls].location> visibility:100 offset:0
-    - playsound <[entityls].location> sound:entity_generic_explode
-    - hurt <[entityls]> 20
+    - playsound <[entityls].location> sound:entity_generic_explode volume:0.7
+    - wait 18t
+    - playeffect effect:explosion_large at:<[effectloc]> visibility:100 offset:2,2,2 quantity:30
+    - playsound <[entityls].location> sound:entity_generic_explode volume:1 pitch:0.5
+    - hurt <[effectloc].find_entities.within[4].exclude[<player>]> 20
 #?KAMU------------------------------------------------------------------
 spell_kamu:
     type: task
