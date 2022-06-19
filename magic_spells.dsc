@@ -74,3 +74,21 @@ spell_honsumaki:
     - playeffect effect:explosion_large at:<[entityls].location> visibility:100 offset:0
     - playsound <[entityls].location> sound:entity_generic_explode
     - hurt <[entityls]> 20
+#?KAMU------------------------------------------------------------------
+spell_kamu:
+    type: task
+    definitions: casttype
+    script:
+    - if <[casttype]> == orb:
+        - flag player magic.spells.kamu.noDamage expire:3s
+        - wait 3.1s
+        - hurt <player.flag[magic.spells.kamu.absorb]>
+        - flag player magic.spells.kamu.absorb:!
+spell_kamu_eventListener:
+    type: world
+    events:
+        on player damaged flagged:magic.spells.kamu.noDamage:
+        - determine passively cancelled
+        - ratelimit <player> 10t
+        - flag player magic.bypass.damageEvent expire:3s
+        - flag player magic.spells.kamu.absorb:+:<context.damage.proc[md_proc]>
