@@ -1,3 +1,11 @@
+flag_applier:
+    type: world
+    events:
+        on player joins flagged:!magic.defense:
+            - flag <player> magic.defense:20
+            - flag <player> magic.mana:20
+
+
 example_gui:
     type: inventory
     debug: false
