@@ -55,3 +55,22 @@ spell_aegis:
         - if <[casttype]> == orb:
             - flag <player> magic.mana:-:10
             - flag <player> magic.defense:+:10
+#?HONSUMAKI------------------------------------------------------------------
+spell_honsumaki:
+    type: task
+    definitions: entityls
+    script:
+    - define effectloc <[entityls].location.up[0.5]>
+    - define circ <[effectloc].points_around_y[radius=3;points=20]>
+    - playsound <player> sound:ENTITY_ZOMBIE_VILLAGER_CONVERTED pitch:0.5
+    - repeat 40:
+        - define val <[value]>
+        - if <[val]> > 20:
+            - define val <[value].sub[20]>
+        - define pos <[circ].get[<[val]>].up[<[value].div[4]>]>
+        - playeffect effect:flame at:<[pos]> offset:0.1,0.1,0.1 quantity:4 visibility:100
+        - adjust <[entityls]> velocity:0,0.2,0
+        - wait 1t
+    - playeffect effect:explosion_large at:<[entityls].location> visibility:100 offset:0
+    - playsound <[entityls].location> sound:entity_generic_explode
+    - hurt <[entityls]> 20

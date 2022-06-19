@@ -39,3 +39,17 @@ book_drift:
                 level: 1
                 current_xp: 0
                 max_xp: 100
+
+book_honsumaki:
+    type: item
+    material: book
+    display name: <gray><bold>Deceit
+    flags:
+        magic:
+            is_book: true
+            spell_to_learn:
+                name: HONSUMAKI
+                script_name: spell_honsumaki
+                level: 1
+                current_xp: 0
+                max_xp: 100
