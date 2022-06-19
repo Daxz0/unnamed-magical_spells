@@ -1,0 +1,94 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "examplepack:taskbar/armor2.png",
+            "ascent": 12,
+            "height": 27,
+            "chars": [
+                "a"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:taskbar/armor2_half.png",
+            "ascent": 12,
+            "height": 27,
+            "chars": [
+                "b"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:taskbar/armor2_empty.png",
+            "ascent": 12,
+            "height": 27,
+            "chars": [
+                "c"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:taskbar/armor2.png",
+            "ascent": 2,
+            "height": 27,
+            "chars": [
+                "d"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:taskbar/armor2_half.png",
+            "ascent": 2,
+            "height": 27,
+            "chars": [
+                "e"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:taskbar/armor2_empty.png",
+            "ascent": 2,
+            "height": 27,
+            "chars": [
+                "f"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:taskbar/mana.png",
+            "ascent": 12,
+            "height": 27,
+            "chars": [
+                "g"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:taskbar/mana.png",
+            "ascent": 2,
+            "height": 27,
+            "chars": [
+                "j"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:gui/space.png",
+            "ascent": -32768,
+            "height": -4,
+            "chars": [
+                "-"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:gui/space.png",
+            "ascent": -32768,
+            "height": 1,
+            "chars": [
+                "_"
+            ]
+        }
+    ]
+  }
