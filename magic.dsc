@@ -98,6 +98,14 @@ staffevent:
             - flag <player> magic.selected_spell:<player.flag[magic.learned_spells.DRIFT]>
             - playsound <player> sound:entity_experience_orb_pickup
 
+# Magic Defense Proc
+md_proc:
+    type: procedure
+    definitions: cdamage
+    script:
+        - define finaldmg <[cdamage].sub[<[cdamage].mul[<player.flag[magic.defense].mul[2.5].div[100]>]>]>
+        - determine <[finaldmg]>
+
 magicdefense:
     type: world
     debug: false
@@ -106,10 +114,11 @@ magicdefense:
             - repeat 2:
                 - run actionbar_update
                 - wait 10t
-        on player damaged:
+        on player damaged priority:1:
+            - if <player.has_flag[magic.bypass.damageEvent]>:
+                - stop
             - if <player.has_flag[magic.defense]> && <player.flag[magic.defense]> > 0:
-                - define finaldmg <context.damage.sub[<context.damage.mul[<player.flag[magic.defense].mul[2.5].div[100]>]>]>
-                - determine <[finaldmg]>
+                - determine <context.damage.proc[md_proc]>
         after player damaged:
             - if <player.has_flag[magic.defense]> && <player.flag[magic.defense]> > 0:
                 - flag <player> magic.defense:-:<context.damage.round>
