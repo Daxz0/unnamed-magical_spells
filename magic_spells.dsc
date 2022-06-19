@@ -92,3 +92,25 @@ spell_kamu_eventListener:
         - ratelimit <player> 10t
         - flag player magic.bypass.damageEvent expire:3s
         - flag player magic.spells.kamu.absorb:+:<context.damage.proc[md_proc]>
+
+#?REGRESS------------------------------------------------------------------
+spell_regress:
+    type: task
+    definitions: casttype
+    script:
+    - define tar <player.precise_target[15].if_null[null]>
+    - if <player.is_on_ground> && <[tar]> != null:
+        - repeat 3:
+            - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<player.location.below[0.1].xyz>]]> offset:0.2,0.2,0.2 visibility:100 special_data:1|<color[45,4,92]> quantity:5
+            - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<player.location.below[0.1].xyz>]]> offset:0.3,0.2,0.3 visibility:100 special_data:1|<color[0,0,0]> quantity:20
+            - teleport <player.location.below[0.3]>
+            - wait 10t
+        - teleport <[tar].location.forward[-1].below[0.9].with_yaw[-90].with_pitch[0]>
+        - repeat 3:
+            - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<[tar].location.forward[-1].below[0.1].with_yaw[-90].with_pitch[0].xyz>]]> offset:0.2,0.2,0.2 visibility:100 special_data:1|<color[45,4,92]> quantity:5
+            - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<[tar].location.forward[-1].below[0.1].with_yaw[-90].with_pitch[0].xyz>]]> offset:0.3,0.2,0.3 visibility:100 special_data:1|<color[0,0,0]> quantity:20
+            - teleport <player.location.above[0.3]>
+            - look <player> <[tar].eye_location>
+            - wait 10t
+        - teleport <player.location.above[1.1]>
+        - look <player> <[tar].eye_location>
