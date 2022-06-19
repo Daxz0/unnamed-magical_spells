@@ -1,0 +1,58 @@
+{
+    "providers": [
+        {
+            "type": "bitmap",
+            "file": "examplepack:gui/vanilla_inventory_reference.png",
+            "ascent": 13,
+            "height": 127,
+            "chars": [
+                "a"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:gui/custom_inventory.png",
+            "ascent": 13,
+            "height": 127,
+            "chars": [
+                "b"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:gui/full_inventory.png",
+            "ascent": 13,
+            "height": 256,
+            "chars": [
+                "c"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:gui/space.png",
+            "ascent": -32768,
+            "height": -10,
+            "chars": [
+                "-"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:gui/space.png",
+            "ascent": -32768,
+            "height": 10,
+            "chars": [
+                "_"
+            ]
+        },
+        {
+            "type": "bitmap",
+            "file": "examplepack:gui/space.png",
+            "ascent": -32768,
+            "height": -170,
+            "chars": [
+                "="
+            ]
+        }
+    ]
+  }
