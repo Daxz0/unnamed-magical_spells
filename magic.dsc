@@ -76,16 +76,17 @@ staffevent:
                 - define spell <player.flag[magic.selected_spell.script_name]>
                 - define entity <player.precise_target[30]||null>
                 - if <[entity]> != null:
-                    - foreach <player.eye_location.right[0.5].forward[0.5].points_between[<player.eye_location.forward[<[entity].location.distance[<player.location>]>]>].distance[1]> as:pos:
-                        - playeffect effect:fireworks_spark at:<[pos]> visibility:100 offset:0
-                        - wait 1t
+                    - if <[spell]> != spell_jizu:
+                        - foreach <player.eye_location.right[0.5].forward[0.5].points_between[<player.eye_location.forward[<[entity].location.distance[<player.location>]>]>].distance[1]> as:pos:
+                            - playeffect effect:fireworks_spark at:<[pos]> visibility:100 offset:0
+                            - wait 1t
                     - run <[spell]> def.entityls:<[entity]> def.effectmultiplier:<context.item.flag[magic.effectmultiplier]> def.casttype:wand
                     - flag <player> magic.selected_spell:!
                     - inventory adjust custom_model_data:1 slot:<player.held_item_slot>
             - else:
                 - narrate "<red>You dont have a spell selected!"
         after player right clicks block with:wand:
-            - flag <player> magic.selected_spell:<player.flag[magic.learned_spells.HONSUMAKI]>
+            - flag <player> magic.selected_spell:<player.flag[magic.learned_spells.JIZU]>
             - inventory adjust custom_model_data:2 slot:<player.held_item_slot>
             - playsound <player> sound:entity_experience_orb_pickup
         on player left clicks block with:magic_orb:
@@ -98,7 +99,7 @@ staffevent:
                 - narrate "<red>You dont have a spell selected!"
         on player right clicks block with:magic_orb:
             - determine passively cancelled
-            - flag <player> magic.selected_spell:<player.flag[magic.learned_spells.DRIFT]>
+            - flag <player> magic.selected_spell:<player.flag[magic.learned_spells.REGRESS]>
             - playsound <player> sound:entity_experience_orb_pickup
 
 # Magic Defense Proc
