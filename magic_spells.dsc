@@ -100,6 +100,8 @@ spell_regress:
     script:
     - define tar <player.precise_target[15].if_null[null]>
     - if <player.is_on_ground> && <[tar]> != null:
+        - flag player magic.spells.regress.noDamage
+        - flag player magic.bypass.damageEvent
         - repeat 3:
             - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<player.location.below[0.1].xyz>]]> offset:0.2,0.2,0.2 visibility:100 special_data:1|<color[45,4,92]> quantity:5
             - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<player.location.below[0.1].xyz>]]> offset:0.3,0.2,0.3 visibility:100 special_data:1|<color[0,0,0]> quantity:20
@@ -114,3 +116,11 @@ spell_regress:
             - wait 10t
         - teleport <player.location.above[1.1]>
         - look <player> <[tar].eye_location>
+        - flag player magic.spells.regress.noDamage:!
+        - flag player magic.bypass.damageEvent:!
+
+spell_regress_eventListener:
+    type: world
+    events:
+        on player damaged by SUFFOCATION flagged:magic.spells.regress.noDamage:
+        - determine passively cancelled
