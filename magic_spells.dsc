@@ -75,11 +75,7 @@ spell_honsumaki:
     - playeffect effect:explosion_large at:<[entityls].location> visibility:100 offset:0
     - playsound <[entityls].location> sound:entity_generic_explode volume:0.7
     - wait 18t
-<<<<<<< Updated upstream
-    - playeffect effect:explosion_large at:<[effectloc]> visibility:100 offset:2,2,2 quantity:30
-=======
     - playeffect effect:explosion_large at:<[effectloc]> visibility:100 offset:1,1,1 quantity:5
->>>>>>> Stashed changes
     - playsound <[entityls].location> sound:entity_generic_explode volume:1 pitch:0.5
     - hurt <[effectloc].find_entities.within[4].exclude[<player>]> 20
 #?KAMU------------------------------------------------------------------
@@ -112,48 +108,27 @@ spell_regress:
     script:
     - define tar <player.precise_target[15].if_null[null]>
     - if <player.is_on_ground> && <[tar]> != null:
-<<<<<<< Updated upstream
-        - flag player magic.spells.regress.noDamage
-        - flag player magic.bypass.damageEvent
-=======
         - adjust <player> gravity:false
->>>>>>> Stashed changes
+        - playsound sound:BLOCK_PORTAL_TRIGGER <player.location> pitch:1.5
         - repeat 3:
             - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<player.location.below[0.1].xyz>]]> offset:0.2,0.2,0.2 visibility:100 special_data:1|<color[45,4,92]> quantity:5
             - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<player.location.below[0.1].xyz>]]> offset:0.3,0.2,0.3 visibility:100 special_data:1|<color[0,0,0]> quantity:20
             - teleport <player.location.below[0.5]>
-            - playsound <player> sound:entity_iron_golem_damage
             - wait 10t
         - teleport <[tar].location.forward[-1].below[1.5].with_yaw[-90].with_pitch[0]>
         - repeat 2:
             - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<[tar].location.forward[-1].below[0.1].with_yaw[-90].with_pitch[0].xyz>]]> offset:0.2,0.2,0.2 visibility:100 special_data:1|<color[45,4,92]> quantity:5
             - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<[tar].location.forward[-1].below[0.1].with_yaw[-90].with_pitch[0].xyz>]]> offset:0.3,0.2,0.3 visibility:100 special_data:1|<color[0,0,0]> quantity:20
-            - playsound <player> sound:entity_iron_golem_damage
-            - playsound <player> sound:entity_iron_golem_repair
             - teleport <player.location.above[0.5]>
             - look <player> <[tar].eye_location>
             - wait 10t
-<<<<<<< Updated upstream
-        - teleport <player.location.above[1.1]>
-        - look <player> <[tar].eye_location>
-        - flag player magic.spells.regress.noDamage:!
-        - flag player magic.bypass.damageEvent:!
-
-spell_regress_eventListener:
-    type: world
-    events:
-        on player damaged by SUFFOCATION flagged:magic.spells.regress.noDamage:
-        - determine passively cancelled
-=======
-        - playsound <player> sound:entity_iron_golem_damage
-        - playsound <player> sound:entity_iron_golem_repair
         - teleport <player.location.above[0.5]>
         - adjust <player> gravity:true
         - look <player> <[tar].eye_location>
 #?JIZU------------------------------------------------------------------
 spell_jizu:
     type: task
-    definitions: entityls
+    definitions: entityls|casttype
     script:
     - define loc <player.location.up[0.5]>
     - define circ <[loc].points_around_y[radius=1;points=25]>
@@ -164,8 +139,39 @@ spell_jizu:
     - foreach <[circ].get[last].up[1].points_between[<[entityls].eye_location>].distance[1]> as:point:
         - playeffect effect:heart at:<[point]> offset:0 visibility:100
         - wait 1t
-    - hurt <player> 5
+    - hurt <player> <player.health.div[5]>
     - playeffect effect:damage_indicator at:<player.location.up[0.5]> offset:0.2,0.2,0.2 quantity:15 visibility:100
     - playeffect effect:damage_indicator at:<[entityls].location.up[0.5]> offset:0.2,0.2,0.2 quantity:15 visibility:100
-    - hurt <[entityls]> 10
->>>>>>> Stashed changes
+    - hurt <[entityls]> <player.health.div[5].mul[4]>
+#?VINDICT------------------------------------------------------------------
+spell_vindict:
+    type: task
+    definitions: casttype
+    script:
+    - flag player magic.spells.vindict.damageTrack:0
+    - repeat 5:
+        - playeffect effect:REDSTONE at:<player.location.up[0.85].points_around_x[radius=2;points=8]> offset:0.3,0.3,0.3 visibility:100 special_data:1|<color[0,255,0]> quantity:50
+        - playeffect effect:REDSTONE at:<player.location.up[0.85].points_around_x[radius=2;points=8]> offset:0.5,0.5,0.5 visibility:100 special_data:1|<color[180,255,0]> quantity:50
+        - playsound sound:BLOCK_ANVIL_LAND <player.location> pitch:0.5
+        - wait 1s
+    - define damage <player.flag[magic.spells.vindict.damageTrack].mul[1.5]>
+    - flag player magic.spells.vindict.damageTrack:!
+    - define points <player.eye_location.forward[1].with_yaw[90].points_between[<player.eye_location.forward[10].with_yaw[90]>].distance[0.1]>
+    - playsound sound:entity_generic_explode <player.location> volume:1
+    - foreach <[points]> as:b:
+        - hurt <[b].find_entities.within[1].exclude[<player>]> <[damage]>
+        - playeffect at:<[b]> effect:redstone visibility:100 special_data:1|<color[0,255,0]> quantity:50 offset:0.3,0.3,0.3
+        - playeffect at:<[b]> effect:redstone visibility:100 special_data:1|<color[150,255,150]> quantity:50 offset:0.3,0.3,0.3
+
+spell_vindict_eventListener:
+    type: world
+    events:
+        on player damaged flagged:magic.spells.vindict.damageTrack:
+        - flag player magic.spells.vindict.damageTrack:+:<context.damage.proc[md_proc]>
+
+#?SHEBU------------------------------------------------------------------
+spell_shebu:
+    type: task
+    definitions: casttype
+    script:
+    - define circ 
