@@ -187,4 +187,5 @@ spell_shebu:
         - cast weakness no_ambient no_icon hide_particles duration:15s amplifier:3
         - repeat 5:
             - playeffect at:<[mshell]> effect:redstone special_data:1|<color[48,25,52]> quantity:50 offset:0.3,0.3,0.3
+            - playeffect at:<[circ]> effect:redstone special_data:1|<color[48,25,52]> quantity:50 offset:0.3,0.3,0.3
             - wait 10t
