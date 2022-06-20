@@ -5,7 +5,6 @@ flag_applier:
             - flag <player> magic.defense:20
             - flag <player> magic.mana:20
 
-
 example_gui:
     type: inventory
     debug: false

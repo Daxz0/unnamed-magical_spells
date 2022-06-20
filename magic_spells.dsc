@@ -1,6 +1,7 @@
 #?PUSHBACK------------------------------------------------------------
 spell_pushback:
     type: task
+    debug: false
     definitions: entityls|effectmultiplier
     script:
     - foreach <[entityls]> as:entity:
@@ -14,6 +15,7 @@ spell_pushback:
 
 pushback_effect:
     type: task
+    debug: false
     definitions: loc
     script:
     - repeat 3:
@@ -22,6 +24,7 @@ pushback_effect:
 #?DRIFT------------------------------------------------------------------
 spell_drift:
     type: task
+    debug: false
     script:
     - playsound <player> sound:entity_zombie_villager_converted volume:100 pitch:1.1
     - cast <player> levitation amplifier:10 d:2t
@@ -37,6 +40,7 @@ spell_drift:
 #?DECEIT------------------------------------------------------------------
 spell_deceit:
     type: task
+    debug: false
     definitions: entityls|effectmultiplier|casttype
     script:
     - if <[casttype]> == wand:
@@ -49,6 +53,7 @@ spell_deceit:
 #?AEGIS------------------------------------------------------------------
 spell_aegis:
     type: task
+    debug: false
     definitions: casttype
     script:
     - if <player.flag[magic.mana]> >= 10:
@@ -58,6 +63,7 @@ spell_aegis:
 #?HONSUMAKI------------------------------------------------------------------
 spell_honsumaki:
     type: task
+    debug: false
     definitions: entityls
     script:
     - define effectloc <[entityls].location.up[0.5]>
@@ -81,6 +87,7 @@ spell_honsumaki:
 #?KAMU------------------------------------------------------------------
 spell_kamu:
     type: task
+    debug: false
     definitions: casttype
     script:
     - if <[casttype]> == orb:
@@ -94,6 +101,7 @@ spell_kamu:
         - flag player magic.spells.kamu.absorb:!
 spell_kamu_eventListener:
     type: world
+    debug: false
     events:
         on player damaged flagged:magic.spells.kamu.noDamage:
         - determine passively cancelled
@@ -104,11 +112,14 @@ spell_kamu_eventListener:
 #?REGRESS------------------------------------------------------------------
 spell_regress:
     type: task
+    debug: false
     definitions: casttype
     script:
     - define tar <player.precise_target[15].if_null[null]>
     - if <player.is_on_ground> && <[tar]> != null:
+        - playsound <player> sound:entity_zombie_villager_converted volume:100 pitch:1.1
         - adjust <player> gravity:false
+        - adjust <player> vision:ENDERMAN
         - playsound sound:BLOCK_PORTAL_TRIGGER <player.location> pitch:1.5
         - repeat 3:
             - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[5,1.5,5].shell.parse[mul[0.3].add[<player.location.below[0.1].xyz>]]> offset:0.2,0.2,0.2 visibility:100 special_data:1|<color[45,4,92]> quantity:5
@@ -124,10 +135,12 @@ spell_regress:
             - wait 10t
         - teleport <player.location.above[0.5]>
         - adjust <player> gravity:true
+        - adjust <player> vision
         - look <player> <[tar].eye_location>
 #?JIZU------------------------------------------------------------------
 spell_jizu:
     type: task
+    debug: false
     definitions: entityls|casttype
     script:
     - define loc <player.location.up[0.5]>
@@ -146,6 +159,7 @@ spell_jizu:
 #?VINDICT------------------------------------------------------------------
 spell_vindict:
     type: task
+    debug: false
     definitions: casttype
     script:
     - flag player magic.spells.vindict.damageTrack:0
@@ -165,6 +179,7 @@ spell_vindict:
 
 spell_vindict_eventListener:
     type: world
+    debug: false
     events:
         on player damaged flagged:magic.spells.vindict.damageTrack:
         - flag player magic.spells.vindict.damageTrack:+:<context.damage.proc[md_proc]>
@@ -172,20 +187,77 @@ spell_vindict_eventListener:
 #?SHEBU------------------------------------------------------------------
 spell_shebu:
     type: task
+    debug: false
     definitions: entityls|casttype
     script:
-    - define circ <player.location.points_around_y[radius=6;points=36]>
-    - repeat 2:
+    - define loc <player.location>
+    - define circ <player.location.points_around_y[radius=6;points=16]>
+    - repeat 3:
         - foreach <[circ]> as:b:
-            - playeffect at:<[b]> effect:redstone special_data:1|<color[48,25,52]> quantity:50 offset:0.3,0.3,0.3
+            - playeffect at:<[b]> effect:redstone special_data:1|<color[48,25,52]> quantity:500 offset:0.5,0.3,0.5 visibility:100
             - wait 1t
+        - wait 1t
+    - playeffect at:<[circ]> effect:redstone special_data:1|<color[48,25,52]> quantity:500 offset:0.5,0.3,0.5 visibility:100
+    - repeat 5:
+        - playeffect at:<[circ]> effect:redstone special_data:1|<color[48,25,52]> quantity:500 offset:0.5,0.3,0.5 visibility:100
+        - foreach <[loc].find_entities.within[6]> as:m:
+            - cast slow no_ambient no_icon hide_particles duration:15s amplifier:3
+            - cast weakness no_ambient no_icon hide_particles duration:15s amplifier:3
         - wait 10t
-    - playeffect at:<[circ]> effect:redstone special_data:1|<color[48,25,52]> quantity:50 offset:0.3,0.3,0.3
-    - foreach <[entityls]> as:m:
-        - define mshell <location[0,0,0,<player.world.name>].to_ellipsoid[2,1.7,2].shell.parse[mul[0.3].add[<[m].location.xyz>]]>
-        - cast slow no_ambient no_icon hide_particles duration:15s amplifier:3
-        - cast weakness no_ambient no_icon hide_particles duration:15s amplifier:3
-        - repeat 5:
-            - playeffect at:<[mshell]> effect:redstone special_data:1|<color[48,25,52]> quantity:50 offset:0.3,0.3,0.3
-            - playeffect at:<[circ]> effect:redstone special_data:1|<color[48,25,52]> quantity:50 offset:0.3,0.3,0.3
-            - wait 10t
+
+#?KAIHI------------------------------------------------------------------
+spell_kaihi:
+    type: task
+    definitions: casttype
+    debug: false
+    script:
+    - playsound <player> sound:entity_zombie_villager_converted volume:100 pitch:1.1
+    - adjust <player> velocity:<player.location.with_pitch[0].with_yaw[90].direction.vector.mul[-1]>
+    - repeat 3:
+            - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[1,5,5].shell.parse[mul[0.3].add[<player.location.up[1.2].forward[-2].with_yaw[-90].xyz>]]> offset:0.2,0.2,0.2 visibility:100 special_data:1|<color[45,4,92]> quantity:5
+            - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[3,3,3].shell.parse[mul[0.3].add[<player.location.up[1.2].forward[-2].with_yaw[-90].xyz>]]> offset:0.3,0.2,0.3 visibility:100 special_data:1|<color[0,0,0]> quantity:20
+            - wait 1t
+    - wait 3t
+    - adjust <player> vision:ENDERMAN
+    - cast INVISIBILITY amplifier:255 duration:15t no_ambient no_icon hide_particles
+    - wait 3t
+    - adjust <player> velocity:0,0,0
+    - teleport <player.location.backward[4].up[0.8].with_yaw[90]>
+    - repeat 3:
+            - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[1,5,5].shell.parse[mul[0.3].add[<player.location.up[0.8].with_yaw[-90].xyz>]]> offset:0.2,0.2,0.2 visibility:100 special_data:1|<color[45,4,92]> quantity:5
+            - playeffect effect:REDSTONE at:<location[0,0,0,<player.world.name>].to_ellipsoid[3,3,3].shell.parse[mul[0.3].add[<player.location.up[0.8].with_yaw[-90].xyz>]]> offset:0.3,0.2,0.3 visibility:100 special_data:1|<color[0,0,0]> quantity:20
+            - wait 1t
+    - adjust <player> vision
+    - adjust <player> velocity:<player.location.with_pitch[0].with_yaw[90].direction.vector.mul[-0.3]>
+    - playsound <player> sound:entity_zombie_villager_converted volume:100 pitch:1
+
+#?SAIGO------------------------------------------------------------------
+spell_saigo:
+    type: task
+    definitions: casttype
+    debug: true
+    script:
+    - define loc <player.location>
+    - define 2pi <util.pi.mul[2]>
+    - define cast_location <player.location.with_yaw[90].with_pitch[0]>
+    - define first_point <player.location.forward[10].up[2].with_yaw[90].with_pitch[0]>
+    - define vector <[first_point].sub[<[cast_location]>]>
+    - define point_list <list>
+    - playsound <player> sound:entity_zombie_villager_converted volume:100 pitch:1.1
+    - cast invisibility amplifier:255 duration:1.5s no_ambient no_icon hide_particles
+    - cast speed amplifier:5 duration:2s no_ambient no_icon hide_particles
+    - adjust <player> vision:ENDERMAN
+    - create player <player.name> save:npc
+    - spawn <entry[npc].created_npc> <[loc]> target:<player.target.if_null[<empty>]>
+    - wait 1s
+    - repeat 10:
+        - define point_location <[vector].rotate_around_y[<[2pi].div[10].mul[<[value]>]>]>
+        - define point_list <[point_list].include[<[cast_location].add[<[point_location]>]>]>
+    - repeat 2:
+        - foreach <[point_list]>:
+            - playeffect effect:cloud at:<[value]> visibility:50 quantity:3 velocity:<[cast_location].sub[<[value]>].normalize>
+        - wait 5t
+    - adjust <player> vision
+    - remove <entry[npc].created_npc>
+    - explode <[loc]> power:5 source:<player>
+    - hurt 30 <[loc].find_entities.within[5].exclude[<player>]>

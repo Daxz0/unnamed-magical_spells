@@ -16,6 +16,8 @@ Wand Spells:
 - Jizu: Sacrifices 20% of your health into a channel that damages your target.
 - Vindict: All damage applied to you will produce a beam that damages your target for 1.5x the damage.
 - Lifeline: Grants you movement speed and generates a lifeline that trails behind you. Any enemies touching it at the end of its duration will take damage.
+- Ketsugou: Chains that encase the player's target that slowly drain the target's mana, feeding it to the caster.
+- Juden: Charges up a spell that increases mana drain every second however the more charge it has, the more damage it deals.
 
 Staff Spells:
 
@@ -23,6 +25,7 @@ Staff Spells:
 - Shebu: Creates waves of shadow that weakens and slows all targets within.
 - Adaigo: Makes a bubble around the caster that slows time of everyone inside, including the caster.
 - Shiringu: Creates an area where spells cannot be casted. All physical damage inside is amplified by 2.5x.
+- Datsu: All targets within range will have their mana fed to an orb in the center that explodes after a period of time. The more mana it contains, the more damage it deals.
 
 Orb Spells:
 
