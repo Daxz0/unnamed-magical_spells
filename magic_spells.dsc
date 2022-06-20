@@ -172,6 +172,19 @@ spell_vindict_eventListener:
 #?SHEBU------------------------------------------------------------------
 spell_shebu:
     type: task
-    definitions: casttype
+    definitions: entityls|casttype
     script:
-    - define circ 
+    - define circ <player.location.points_around_y[radius=6;points=36]>
+    - repeat 2:
+        - foreach <[circ]> as:b:
+            - playeffect at:<[b]> effect:redstone special_data:1|<color[48,25,52]> quantity:50 offset:0.3,0.3,0.3
+            - wait 1t
+        - wait 10t
+    - playeffect at:<[circ]> effect:redstone special_data:1|<color[48,25,52]> quantity:50 offset:0.3,0.3,0.3
+    - foreach <[entityls]> as:m:
+        - define mshell <location[0,0,0,<player.world.name>].to_ellipsoid[2,1.7,2].shell.parse[mul[0.3].add[<[m].location.xyz>]]>
+        - cast slow no_ambient no_icon hide_particles duration:15s amplifier:3
+        - cast weakness no_ambient no_icon hide_particles duration:15s amplifier:3
+        - repeat 5:
+            - playeffect at:<[mshell]> effect:redstone special_data:1|<color[48,25,52]> quantity:50 offset:0.3,0.3,0.3
+            - wait 10t
