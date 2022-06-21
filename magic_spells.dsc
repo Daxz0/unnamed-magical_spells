@@ -261,3 +261,32 @@ spell_saigo:
     - remove <entry[npc].created_npc>
     - explode <[loc]> power:5 source:<player>
     - hurt 30 <[loc].find_entities.within[5].exclude[<player>]>
+
+#?Kureiji------------------------------------------------------------------
+spell_kureiji:
+    type: task
+    definitions: casttype
+    script:
+        - define rand <util.random.int[1].to[6]>
+        - choose <[rand]>:
+            - case 1:
+                - define ability scythe_slasher
+                - if !<player.is_sneaking>:
+                    - define slash_points <player.location.forward[3].with_yaw[90].rotate_around_y[180]>
+                    - define damage 30
+                - else:
+                    - define slash_points <player.location.forward[3].with_yaw[90].rotate_around_y[360]>
+                    - define damage 15
+                - foreach <[slash_points]> as:point:
+                    - hurt <[damage]> <[point].find_entities.within[0.5]>
+                    - playeffect effect:redstone at:<[point]> offset:0.2,0.2,0.2 visibility:100 special_data:1|<color[137,0,0]> quantity:5
+            - case 2:
+                - define ability death_seeker
+            - case 3:
+                - define ability heat_waves
+            - case 4:
+                - define ability resurrection
+            - case 5:
+                - define ability tracking_signal
+            - case 6:
+                - define ability ultimate_defense
