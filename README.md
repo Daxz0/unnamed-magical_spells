@@ -7,7 +7,7 @@ There are 4 types of casters that each performs unique functions. These include:
 - Wands: Specific target spells.
 - Staffs: Area of effect spells.
 - Orbs: Self target spells.
-- Realm: Allows the caster to enter the Realm.
+- Ring: Allows the caster to enter and exit the Realm.
 
 ## Spells
 
@@ -15,7 +15,7 @@ Wand Spells:
 
 - Jizu: Sacrifices 20% of your health into a channel that damages your target.
 - Vindict: All damage applied to you will produce a beam that damages your target for 1.5x the damage.
-- Lifeline: Grants you movement speed and generates a lifeline that trails behind you. Any enemies touching it at the end of its duration will take damage.
+- Raneji: Grants you movement speed and generates a raneji that trails behind you. Any enemies touching it at the end of its duration will take damage.
 - Ketsugou: Chains that encase the player's target that slowly drain the target's mana, feeding it to the caster.
 - Juden: Charges up a spell that increases mana drain every second however the more charge it has, the more damage it deals.
 

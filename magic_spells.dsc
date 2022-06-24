@@ -267,21 +267,41 @@ spell_kureiji:
     type: task
     definitions: casttype
     script:
-        - define rand <util.random.int[1].to[6]>
+        #<util.random.int[1].to[6]>
+        - define rand 2
         - choose <[rand]>:
             - case 1:
                 - define ability scythe_slasher
+                - define loc <player.location.up[0.8]>
+                - rotate <player> duration:10t frequency:1t yaw:20 pitch:0
                 - if !<player.is_sneaking>:
-                    - define slash_points <player.location.forward[3].with_yaw[90].rotate_around_y[180]>
-                    - define damage 30
-                - else:
-                    - define slash_points <player.location.forward[3].with_yaw[90].rotate_around_y[360]>
+                    - define damage1 35
                     - define damage 15
-                - foreach <[slash_points]> as:point:
-                    - hurt <[damage]> <[point].find_entities.within[0.5]>
-                    - playeffect effect:redstone at:<[point]> offset:0.2,0.2,0.2 visibility:100 special_data:1|<color[137,0,0]> quantity:5
+                    - repeat 180:
+                        - define angle <location[3,0.8,3].rotate_around_y[<[value].to_radians.mul[82]>]>
+                        - playeffect effect:redstone at:<[loc].add[<[angle]>]> offset:0 special_data:2|<&color[#301934]>
+                    - hurt <[damage1]> <[loc].find_entities.within[3].exclude[<player>]>
+                    - wait 15t
+                    - repeat 180:
+                        - define angle <location[5,0.8,5].rotate_around_y[<[value].to_radians.mul[82]>]>
+                        - playeffect effect:redstone at:<[loc].add[<[angle]>]> offset:0 special_data:5|<&color[#000000]>
+                    - hurt <[damage]> <[loc].find_entities.within[5].exclude[<player>]>
+                - else:
+                    - define damage 30
+                    - repeat 180:
+                        - define angle <location[5,0.8,5].rotate_around_y[<[value].to_radians.mul[82]>]>
+                        - playeffect effect:redstone at:<[loc].add[<[angle]>]> offset:0 special_data:5|<&color[#301934]>
             - case 2:
                 - define ability death_seeker
+                - define loc <player.location.up[4]>
+                - define elist <[loc].find_entities.within[15]>
+                - repeat 10:
+                    - playeffect squid_ink at:<player.location.above[3]> offset:1,1,1 quantity:100
+                    - wait 1t
+                - foreach <[elist].exclude[<player>]> as:e:
+                    - cast blindness duration:10s amplifier:100 hide_particles no_ambient no_icon <[e]>
+                    - repeat 100:
+                        - playeffect at:<[loc]> effect:squid_ink velocity:<[loc].sub[<[e].location.above[1]>].mul[-1].normalize> offset:0.3,0.3,0.3 quantity:30
             - case 3:
                 - define ability heat_waves
             - case 4:
