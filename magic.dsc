@@ -135,6 +135,12 @@ spell_book:
             - if <context.item.has_flag[magic.is_book]>:
                 - flag <player> magic.learned_spells.<context.item.flag[magic.spell_to_learn.name]>:<context.item.flag[magic.spell_to_learn]>
 
+magic_handlers:
+    type: world
+    events:
+        on player damages entity:
+            - determine <player.flag[magic.handler.damageModifier]> if:<player.has_flag[magic.handler.damageModifier]>
+
 actionbar_update:
     type: task
     debug: false

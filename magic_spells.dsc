@@ -268,10 +268,10 @@ spell_kureiji:
     definitions: casttype
     script:
         #<util.random.int[1].to[6]>
-        - define rand 2
+        - define rand 4
         - choose <[rand]>:
             - case 1:
-                - define ability scythe_slasher
+                - define ability Desaisu
                 - define loc <player.location.up[0.8]>
                 - rotate <player> duration:10t frequency:1t yaw:20 pitch:0
                 - if !<player.is_sneaking>:
@@ -292,21 +292,48 @@ spell_kureiji:
                         - define angle <location[5,0.8,5].rotate_around_y[<[value].to_radians.mul[82]>]>
                         - playeffect effect:redstone at:<[loc].add[<[angle]>]> offset:0 special_data:5|<&color[#301934]>
             - case 2:
-                - define ability death_seeker
-                - define loc <player.location.up[4]>
+                - define ability Desuika
+                - define loc <player.location.up[3]>
                 - define elist <[loc].find_entities.within[15]>
                 - repeat 10:
-                    - playeffect squid_ink at:<player.location.above[3]> offset:1,1,1 quantity:100
+                    - playeffect squid_ink at:<[loc]> offset:1,1,1 quantity:100
                     - wait 1t
                 - foreach <[elist].exclude[<player>]> as:e:
                     - cast blindness duration:10s amplifier:100 hide_particles no_ambient no_icon <[e]>
+                    - hurt 10 <[e]>
                     - repeat 100:
                         - playeffect at:<[loc]> effect:squid_ink velocity:<[loc].sub[<[e].location.above[1]>].mul[-1].normalize> offset:0.3,0.3,0.3 quantity:30
             - case 3:
-                - define ability heat_waves
+                #darkness stomp
+                - define ability Sutonbu
+                - define loc <player.location>
+                - repeat 30:
+                    - define angle <location[3,0.8,3].rotate_around_y[<[value].to_radians.mul[82]>]>
+                    - define point:->:<[loc].add[<[angle]>]>
+                - repeat 3:
+                    - foreach <[point]> as:p:
+                        - playeffect at:<[loc]> effect:squid_ink velocity:<[p].sub[<[loc]>].mul[1].normalize> offset:0 quantity:1
+                    - define elist <[loc].find_entities.within[5].exclude[<player>]>
+                    - cast blindness duration:10s amplifier:100 hide_particles no_ambient no_icon <[elist]>
+                    - hurt 20 <[elist]>
+                    - wait 15t
             - case 4:
-                - define ability resurrection
+                #light devour
+                - define ability Yadamaku
+                - define elist <player.location.find_entities.within[10].exclude[<player>]>
+                - define loc <player.eye_location>
+                - foreach <[elist]> as:e:
+                    - define points:->:<[e].eye_location.points_between[<[loc]>]>
+                - foreach <[points]> as:p:
+                    - playeffect at:<[p]> effect:cloud offset:0
+                    - narrate <[p]>
+                    - wait 1s
+                - flag <player> magic.spells.kureiji.yadamaku.souls:+:1
+                - flag <player> magic.handler.damageModifier:<player.flag[magic.spells.kureiji.yadamaku.souls].mul[1.5]> expire:10s
+                - flag <player> magic.spells.kureiji.yadamaku.souls:!
             - case 5:
-                - define ability tracking_signal
+                #light steal
+                - define ability Mitsouhi
             - case 6:
-                - define ability ultimate_defense
+                #light weaving
+                - define ability Uradeba
