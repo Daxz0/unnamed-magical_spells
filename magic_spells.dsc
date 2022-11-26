@@ -49,17 +49,18 @@ spell_deceit:
         - playsound <[entityls].location> sound:entity_generic_explode pitch:2 volume:1a0
         - playsound <player> sound:entity_lightning_bolt_impact pitch:0.8 volume:10
         - playsound <player> sound:block_bell_use pitch:2 volume:100
-    - hurt <[entityls]> <element[10].mul[<[effectmultiplier]>]> source:<player>
+    - hurt <[entityls]> <element[<proc[mm_proc].context[<player.flag[magic.mana.capacity]>|10|0|<[effectmultiplier]>]>]> source:<player>
 #?AEGIS------------------------------------------------------------------
 spell_aegis:
     type: task
     debug: false
     definitions: casttype
     script:
-    - if <player.flag[magic.mana]> >= 10:
+    - if <player.flag[magic.mana.value]> >= 10:
         - if <[casttype]> == orb:
-            - flag <player> magic.mana:-:10
+            - flag <player> magic.mana.value:-:10
             - flag <player> magic.defense:+:10
+            - playsound sound:entity_iron_golem_hurt pitch:0.9 <player.location>
 #?HONSUMAKI------------------------------------------------------------------
 spell_honsumaki:
     type: task
@@ -83,7 +84,7 @@ spell_honsumaki:
     - wait 18t
     - playeffect effect:explosion_large at:<[effectloc]> visibility:100 offset:1,1,1 quantity:5
     - playsound <[entityls].location> sound:entity_generic_explode volume:1 pitch:0.5
-    - hurt <[effectloc].find_entities.within[4].exclude[<player>]> 20
+    - hurt <[effectloc].find_entities.within[4].exclude[<player>]> <element[<proc[mm_proc].context[<player.flag[magic.mana.capacity]>|20|0|1]>]>
 #?KAMU------------------------------------------------------------------
 spell_kamu:
     type: task
@@ -155,7 +156,7 @@ spell_jizu:
     - hurt <player> <player.health.div[5]>
     - playeffect effect:damage_indicator at:<player.location.up[0.5]> offset:0.2,0.2,0.2 quantity:15 visibility:100
     - playeffect effect:damage_indicator at:<[entityls].location.up[0.5]> offset:0.2,0.2,0.2 quantity:15 visibility:100
-    - hurt <[entityls]> <player.health.div[5].mul[4]>
+    - hurt <[entityls]> <element[<proc[mm_proc].context[<player.flag[magic.mana.capacity]>|<player.health.div[5].mul[4]>|0|1]>]>
 #?VINDICT------------------------------------------------------------------
 spell_vindict:
     type: task
@@ -173,7 +174,7 @@ spell_vindict:
     - define points <player.eye_location.forward[1].with_yaw[90].points_between[<player.eye_location.forward[10].with_yaw[90]>].distance[0.1]>
     - playsound sound:entity_generic_explode <player.location> volume:1
     - foreach <[points]> as:b:
-        - hurt <[b].find_entities.within[1].exclude[<player>]> <[damage]>
+        - hurt <[b].find_entities.within[1].exclude[<player>]> <element[<proc[mm_proc].context[<player.flag[magic.mana.capacity]>|<[damage]>|0|1]>]>
         - playeffect at:<[b]> effect:redstone visibility:100 special_data:1|<color[0,255,0]> quantity:50 offset:0.3,0.3,0.3
         - playeffect at:<[b]> effect:redstone visibility:100 special_data:1|<color[150,255,150]> quantity:50 offset:0.3,0.3,0.3
 
@@ -191,16 +192,16 @@ spell_shebu:
     definitions: entityls|casttype
     script:
     - define loc <player.location>
-    - define circ <player.location.points_around_y[radius=6;points=16]>
+    - define circ <player.location.points_around_y[radius=3;points=6]>
     - repeat 3:
         - foreach <[circ]> as:b:
-            - playeffect at:<[b]> effect:redstone special_data:1|<color[48,25,52]> quantity:500 offset:0.5,0.3,0.5 visibility:100
+            - playeffect at:<[b]> effect:redstone special_data:1|<color[48,25,52]> quantity:500 offset:3,0.3,3 visibility:100
             - wait 1t
         - wait 1t
-    - playeffect at:<[circ]> effect:redstone special_data:1|<color[48,25,52]> quantity:500 offset:0.5,0.3,0.5 visibility:100
+    - playeffect at:<[circ]> effect:redstone special_data:1|<color[48,25,52]> quantity:500 offset:3,0.3,3 visibility:100
     - repeat 5:
-        - playeffect at:<[circ]> effect:redstone special_data:1|<color[48,25,52]> quantity:500 offset:0.5,0.3,0.5 visibility:100
-        - foreach <[loc].find_entities.within[6]> as:m:
+        - playeffect at:<[circ]> effect:redstone special_data:1|<color[48,25,52]> quantity:500 offset:3,0.3,3 visibility:100
+        - foreach <[loc].find_entities.within[6].exclude[<player>]> as:m:
             - cast slow no_ambient no_icon hide_particles duration:15s amplifier:3
             - cast weakness no_ambient no_icon hide_particles duration:15s amplifier:3
         - wait 10t
@@ -268,7 +269,7 @@ spell_kureiji:
     definitions: casttype
     script:
         #<util.random.int[1].to[6]>
-        - define rand 4
+        - define rand 6
         - choose <[rand]>:
             - case 1:
                 - define ability Desaisu
@@ -304,7 +305,6 @@ spell_kureiji:
                     - repeat 100:
                         - playeffect at:<[loc]> effect:squid_ink velocity:<[loc].sub[<[e].location.above[1]>].mul[-1].normalize> offset:0.3,0.3,0.3 quantity:30
             - case 3:
-                #darkness stomp
                 - define ability Sutonbu
                 - define loc <player.location>
                 - repeat 30:
@@ -318,22 +318,34 @@ spell_kureiji:
                     - hurt 20 <[elist]>
                     - wait 15t
             - case 4:
-                #light devour
                 - define ability Yadamaku
                 - define elist <player.location.find_entities.within[10].exclude[<player>]>
                 - define loc <player.eye_location>
                 - foreach <[elist]> as:e:
+                    - flag <player> magic.spells.kureiji.yadamaku.souls:+:1
                     - define points:->:<[e].eye_location.points_between[<[loc]>]>
                 - foreach <[points]> as:p:
                     - playeffect at:<[p]> effect:cloud offset:0
-                    - narrate <[p]>
                     - wait 1s
-                - flag <player> magic.spells.kureiji.yadamaku.souls:+:1
                 - flag <player> magic.handler.damageModifier:<player.flag[magic.spells.kureiji.yadamaku.souls].mul[1.5]> expire:10s
                 - flag <player> magic.spells.kureiji.yadamaku.souls:!
             - case 5:
-                #light steal
+                #light room
                 - define ability Mitsouhi
             - case 6:
                 #light weaving
                 - define ability Uradeba
+                - define possible_points <player.location.find_blocks.within[8]>
+                - define counter 0
+                - while <[counter]> < 15:
+                    - define point_1 <[possible_points].random>
+                    - define point_2 <[possible_points].random>
+                    - if <[point_1].distance[<[point_2]>]> > 10:
+                        - define counter <[counter].add[1]>
+                        - playeffect effect:cloud at:<[point_1].points_between[<[point_2]>].distance[0.1]> offset:0
+                        - foreach <[point_1].points_between[<[point_2]>].distance[0.1]> as:a:
+                            - hurt <[a].find_entities.within[0.5].exclude[<player>]> 5
+
+#?Mirasha------------------------------------------------------------------
+
+

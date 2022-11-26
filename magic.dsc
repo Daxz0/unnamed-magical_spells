@@ -3,7 +3,8 @@ flag_applier:
     events:
         on player joins flagged:!magic.defense:
             - flag <player> magic.defense:20
-            - flag <player> magic.mana:20
+            - flag <player> magic.mana.value:20
+            - flag <player> magic.mana.capacity:20
 
 example_gui:
     type: inventory
@@ -108,6 +109,13 @@ md_proc:
     script:
         - define finaldmg <[cdamage].sub[<[cdamage].mul[<player.flag[magic.defense].mul[2.5].div[100]>]>]>
         - determine <[finaldmg]>
+
+mm_proc:
+    type: procedure
+    definitions: mana|base|additional|mul
+    script:
+        - define damage <[base].mul[<[mul]>].add[<[additional]>].mul[<[mana].div[20]>]>
+        - determine <[damage]>
 
 magicdefense:
     type: world
