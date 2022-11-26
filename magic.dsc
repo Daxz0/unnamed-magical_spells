@@ -106,6 +106,7 @@ staffevent:
 md_proc:
     type: procedure
     definitions: cdamage
+    debug: false
     script:
         - define finaldmg <[cdamage].sub[<[cdamage].mul[<player.flag[magic.defense].mul[2.5].div[100]>]>]>
         - determine <[finaldmg]>
@@ -113,9 +114,19 @@ md_proc:
 mm_proc:
     type: procedure
     definitions: mana|base|additional|mul
+    debug: false
     script:
         - define damage <[base].mul[<[mul]>].add[<[additional]>].mul[<[mana].div[20]>]>
         - determine <[damage]>
+
+move_cancel:
+    type: world
+    events:
+        on player walks flagged:magic.walk:
+            - determine passively cancelled
+        on player steps on block flagged:magic.step:
+            - determine passively cancelled
+
 
 magicdefense:
     type: world
